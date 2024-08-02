@@ -1,0 +1,65 @@
+[
+  {
+    "pod_name": "Services",
+    "teams": [
+      {
+        "accounts": [
+          {
+            "account_id": "999091890426",
+            "account_name": "web-dev"
+          },
+          {
+            "account_id": "222215936496",
+            "account_name": "web-build"
+          },
+          {
+            "account_id": "908290149969",
+            "account_name": "web-staging"
+          },
+          {
+            "account_id": "148999969200",
+            "account_name": "web-integration"
+          },
+          {
+            "account_id": "990184099692",
+            "account_name": "web-production"
+          }
+        ],
+        "contacts": [
+          "Veronica Mars",
+          "Nancy Drew"
+        ],
+        "slack_channel_id": "CS1Y50U3Y1A",
+        "slack_channel_name": "#ask-web-team",
+        "team_name": "Ask Web Team"
+      }
+    ]
+  },
+  {
+    "pod_name": "Platform",
+    "teams": [
+      {
+        "accounts": [
+          {
+            "account_id": "910488636911",
+            "account_name": "platform-testing"
+          },
+          {
+            "account_id": "645883267259",
+            "account_name": "platform-production-europe"
+          },
+          {
+            "account_id": "957860411334",
+            "account_name": "platform-production-asia"
+          }
+        ],
+        "contacts": [
+          "Jessica Fletcher"
+        ],
+        "slack_channel_id": "CS11Y5A0Y3U",
+        "slack_channel_name": "#platform-public",
+        "team_name": "Platform"
+      }
+    ]
+  }
+]
