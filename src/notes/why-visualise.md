@@ -87,6 +87,8 @@ ${Inputs.table(datasaurus, {
 
 </div>
 
+## Graphs
+
 ```js
 Plot.plot({
     x: {nice: true},
