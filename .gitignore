@@ -1,4 +1,9 @@
 .DS_Store
+.idea
 /dist/
 node_modules/
 yarn-error.log
+.env
+
+# Ignore private data files in .config directory
+.config

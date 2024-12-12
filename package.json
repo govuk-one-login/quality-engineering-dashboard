@@ -6,15 +6,21 @@
     "build": "rimraf dist && observable build",
     "dev": "observable preview",
     "deploy": "observable deploy",
-    "observable": "observable"
+    "observable": "observable",
+    "test": "NODE_OPTIONS='--experimental-modules --experimental-vm-modules --experimental-specifier-resolution=node' jest"
   },
   "dependencies": {
     "@observablehq/framework": "^1.9.0",
     "d3-dsv": "^3.0.1",
-    "d3-time-format": "^4.1.0"
+    "d3-sankey": "0.12.3",
+    "d3-time-format": "^4.1.0",
+    "jest": "^29.7.0"
   },
   "devDependencies": {
-    "rimraf": "^5.0.5"
+    "dotenv": "16.4.5",
+    "octokit": "4.0.2",
+    "rimraf": "^5.0.5",
+    "yaml": "2.5.0"
   },
   "engines": {
     "node": ">=18"
