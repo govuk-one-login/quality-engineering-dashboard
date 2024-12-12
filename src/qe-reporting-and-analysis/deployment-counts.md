@@ -84,7 +84,7 @@ const end = view(Inputs.date({label: "End", value: maxDate, min: minDate, max: m
 const endDate = Generators.input(end)
 ```
 
-# Total deployments - ${mappedDeployments.filter(filterShasByDateRange).length}
+# Total deployed commits - ${mappedDeployments.filter(filterShasByDateRange).length}
 
 <p>
 </p>

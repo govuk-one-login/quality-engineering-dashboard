@@ -28,7 +28,7 @@ ${Inputs.table(rawData)}
 ## Effect of Outliers
 
 ```js
-const outlier = view(Inputs.radio([0, 4, 5, 6, 12, 16, 20, 100], {label: "Outlier", value:5}));
+const outlier = view(Inputs.radio([0, 4, 5, 6, 12, 13, 14, 15, 20, 100], {label: "Outlier", value:5}));
 ```
 
 ```js
