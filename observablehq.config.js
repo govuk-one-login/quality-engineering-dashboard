@@ -14,6 +14,12 @@ export default {
       ]
     },
     {
+      "name": "QE Reporting & Analyis",
+      pages: [
+        {name: "Deployment Counts", path: "/qe-reporting-and-analysis/deployment-counts"}
+      ]
+    },
+    {
       name: "Notes",
       pages: [
         {"name": "Why visualise", path: "/notes/why-visualise"},
