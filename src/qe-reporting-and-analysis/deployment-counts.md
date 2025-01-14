@@ -2,13 +2,12 @@
 
 ```js
 import {
-    createAWSAccountLookupTable,
-    addAccountDetailsToDeployments,
-    defaultTableOptions,
-    shortSha,
-    sortDeploymentsByDate
+    addAccountDetailsToDeployments
 } from "../components/deployments.js";
+
+import { createAWSAccountLookupTable } from "../components/accounts.js"
 ```
+
 
 ```js
 const awsAccountMappings = FileAttachment("../data/config/aws-accountid-config.json").json()

@@ -7,3 +7,5 @@ yarn-error.log
 
 # Ignore private data files in .config directory
 .config
+
+coverage
