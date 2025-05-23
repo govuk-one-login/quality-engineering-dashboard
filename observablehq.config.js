@@ -14,9 +14,9 @@ export default {
       ]
     },
     {
-      "name": "QE Reporting & Analyis",
+      "name": "Archived QE Reporting & Analysis",
       pages: [
-        {name: "Deployment Counts", path: "/qe-reporting-and-analysis/deployment-counts"}
+        {name: "Nov 24 - Deployment Counts", path: "/qe-reporting-and-analysis/deployment-counts"}
       ]
     },
     {
@@ -24,6 +24,12 @@ export default {
       pages: [
         {"name": "Why visualise", path: "/notes/why-visualise"},
         {"name": "Box Plot", path: "/notes/box-plot"},
+      ]
+    },
+    {
+      name: "Exploration",
+      pages: [
+        {"name": "Plots", path: "/explorations/plots"}
       ]
     }
   ],
@@ -34,6 +40,7 @@ export default {
   // The path to the source root.
   root: "src",
 
+  // dynamicPaths: []
   // Some additional configuration options and their defaults:
   // theme: "default", // try "light", "dark", "slate", etc.
   // header: "", // what to show in the header (HTML)
