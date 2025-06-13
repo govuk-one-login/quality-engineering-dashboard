@@ -1,18 +1,18 @@
 ```js
 import { createAWSAccountLookupTable } from "../components/accounts.js"
 
-import { 
-    applyDurationRangeToCommit, 
+import {
+    applyDurationRangeToCommit,
 } from "../components/commits.js"
 
-import { 
-    sortByDateWithKey, 
-    sortByTemporalWithKey 
+import {
+    sortByDateWithKey,
+    sortByTemporalWithKey
 } from "../components/dates.js"
 
-import { 
-    addAccountDetailsToDeployments, 
-    flattenByCommitSha 
+import {
+    addAccountDetailsToDeployments,
+    flattenByCommitSha
 } from "../components/deployments.js";
 
 import { filterByQuarterWithKey, commitsWithNonEmptyPods } from "../components/filters.js"
@@ -45,7 +45,7 @@ const displayBoxChart = (data, facetKey, domain) => {
         marks: [
             Plot.frame(),
             Plot.axisX({label:"error budget in minutes per month", labelArrow: "none", labelAnchor: "center", anchor: "bottom", ticks: [43, 220], tickFormat:((d) => d > 200 ? "99.5%" : "99.9%")}), // place fx axis opposite x
-            Plot.axisX({anchor: "top",  labelAnchor: "left", ticks: [60, 120, 180, 240, 300], label: "minutes"}), 
+            Plot.axisX({anchor: "top",  labelAnchor: "left", ticks: [60, 120, 180, 240, 300], label: "minutes"}),
 
             Plot.boxX(data, { x: "duration", y: (d) => d.startTimeData.week, fy:facetKey, fill: "pod" }),
             Plot.gridX({interval: 30, stroke: "silver", strokeOpacity: 0.5}),
@@ -169,7 +169,3 @@ display(Plot.plot({
     ]
 }))
 ```
-
-
-
-

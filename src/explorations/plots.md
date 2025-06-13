@@ -44,7 +44,7 @@ const commitsWithDuration = flattenByCommitSha(mappedDeployments).filter((c)=>{
         ...c
 //        recoveryDuration: daysBetween(c.startTime, c.endTime)
     }
-    
+
 }).filter((c) => !["performance-testing"].includes(c.repository))
 ```
 
@@ -88,7 +88,7 @@ display(Plot.plot({
 # Bollinger
 
 > The bollinger mark is a composite mark consisting of a line representing a moving average and an area representing volatility as a band; the band thickness is proportional to the deviation of nearby values.
-> 
+>
 > https://observablehq.com/plot/marks/bollinger
 
 
@@ -97,7 +97,7 @@ const n = 10
 const k = 2
 ```
 
-## Bollinger - Pod 
+## Bollinger - Pod
 
 ```js
 display(Plot.plot({
@@ -134,7 +134,7 @@ display(Plot.plot({
 # Dot Plot w/ Linear Regression Mark
 
 > The dot mark draws circles or other symbols positioned in x and y as in a scatterplot.
-> 
+>
 > https://observablehq.com/plot/marks/dot
 
 > The linear regression mark draws linear regression lines with confidence bands, representing the estimated linear relation of a dependent variable (typically y) on an independent variable (typically x).
@@ -173,7 +173,7 @@ display(Plot.plot({
 }))
 ```
 
-# Dot Plot - Team 
+# Dot Plot - Team
 
 ```js
 display(Plot.plot({
@@ -294,7 +294,7 @@ display(Plot.plot({
 ```js
 const deploymentFrequencyAsGroupedCell = (data, facetKey) => {
     const plotHeight = _.uniqBy(data, facetKey).length * 150
-    
+
     return Plot.plot({
         color: {
             scheme: "warm",

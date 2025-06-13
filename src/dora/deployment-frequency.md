@@ -6,9 +6,9 @@ import {
     flattenByCommitSha
 } from "../components/deployments.js";
 
-import { 
-    applyDurationRangeToCommit, 
-    applyDurationRangeToCommitWithSort 
+import {
+    applyDurationRangeToCommit,
+    applyDurationRangeToCommitWithSort
 } from "../components/commits.js"
 
 import { expandDateProperties } from "../components/dates.js"
@@ -85,7 +85,7 @@ display(Plot.plot({
 ```js
 const deploymentFrequencyAsGroupedCell = (data, facetKey) => {
     const plotHeight = _.uniqBy(data, facetKey).length * 150
-    
+
     return Plot.plot({
         color: {
             scheme: "blues",
@@ -127,7 +127,7 @@ const deploymentFrequencyAsGroupedCell = (data, facetKey) => {
 ```
 
 
-# Pod 
+# Pod
 
 ${deploymentFrequencyAsGroupedCell(commitsWithDuration, "pod")}
 
@@ -143,5 +143,3 @@ ${deploymentFrequencyAsGroupedCell(commitsWithDuration, "service")}
 # Repository
 
 ${deploymentFrequencyAsGroupedCell(commitsWithDuration, "repository")}
-
-
