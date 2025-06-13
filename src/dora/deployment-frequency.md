@@ -88,12 +88,12 @@ const deploymentFrequencyAsGroupedCell = (data, facetKey) => {
     
     return Plot.plot({
         color: {
-            scheme: "pubu",
+            scheme: "blues",
             legend: "ramp",
             type: "threshold",
             width: 300,
             label: `Number of deployments to production`,
-            domain: d3.range(0, 30, 5)
+            domain: d3.range(0, 30, 2)
         },
         facet: {
             data: data,
@@ -143,4 +143,5 @@ ${deploymentFrequencyAsGroupedCell(commitsWithDuration, "service")}
 # Repository
 
 ${deploymentFrequencyAsGroupedCell(commitsWithDuration, "repository")}
+
 
