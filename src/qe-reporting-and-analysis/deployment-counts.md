@@ -470,7 +470,7 @@ const generateCountsForGraphing = function (deployments) {
                 return acc;
             }, [])
         }
-        
+
     }, commitStats)
     return commitStats
 }
@@ -633,4 +633,3 @@ const displayCountsCharts = function displayCountsCharts (chartData) {
 ```js
 display(displayCountsCharts(graphData))
 ```
-

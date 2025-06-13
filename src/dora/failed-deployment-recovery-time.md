@@ -9,9 +9,9 @@
 ```js
 import { createAWSAccountLookupTable } from "../components/accounts.js"
 
-import { 
-    applyDurationRangeToCommit, 
-    applyRecoveryDurationToCommit 
+import {
+    applyDurationRangeToCommit,
+    applyRecoveryDurationToCommit
 } from "../components/commits.js"
 
 import { weekdays } from "../components/dates.js"
@@ -103,7 +103,7 @@ const restorationsForDayWeek = restorations.map((c) => {
 ```js
 const deploymentFrequencyAsGroupedCell = (data, facetKey) => {
     const plotHeight = _.uniqBy(data, facetKey).length * 150
-    
+
     return Plot.plot({
         color: {
             scheme: "reds",
@@ -162,5 +162,3 @@ ${deploymentFrequencyAsGroupedCell(commitsWithDuration, "service")}
 # Repository
 
 ${deploymentFrequencyAsGroupedCell(commitsWithDuration, "repository")}
-
-
