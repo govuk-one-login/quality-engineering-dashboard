@@ -10,7 +10,7 @@
     "test": "NODE_OPTIONS='--experimental-modules --experimental-vm-modules --experimental-specifier-resolution=node' jest"
   },
   "dependencies": {
-    "@observablehq/framework": "^1.9.0",
+    "@observablehq/framework": "^1.13.3",
     "d3-dsv": "^3.0.1",
     "d3-sankey": "0.12.3",
     "d3-time-format": "^4.1.0",
