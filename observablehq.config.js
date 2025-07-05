@@ -14,6 +14,12 @@ export default {
       ]
     },
     {
+      name: "Defect Analysis",
+      pages: [
+        {"name": "Bugs", path: "/defect-analysis/bugs"}
+      ]
+    },
+    {
       "name": "Archived QE Reporting & Analysis",
       pages: [
         {name: "Nov 24 - Deployment Counts", path: "/qe-reporting-and-analysis/deployment-counts"}
