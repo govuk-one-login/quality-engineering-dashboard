@@ -16,7 +16,7 @@
     "d3-time-format": "^4.1.0",
     "jest": "^30.0.5",
     "lodash": "4.17.21",
-    "temporal-polyfill": "0.2.5"
+    "temporal-polyfill": "0.3.0"
   },
   "devDependencies": {
     "dotenv": "17.2.1",
