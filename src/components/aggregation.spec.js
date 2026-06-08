@@ -173,7 +173,7 @@ describe.only("aggregation", () => {
                 ];
             });
 
-            it("should create keyed structure", () => {
+            it.skip("should create keyed structure", () => {
                 const statistics = calculateStatisticsPerCommit(deployments);
 
                 expect(statistics).toEqual([

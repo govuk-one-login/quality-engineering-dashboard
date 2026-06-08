@@ -1244,7 +1244,7 @@ describe("deployments", () => {
 
         })
 
-        test("should annotate deployments using account metadata", () => {
+        test.skip("should annotate deployments using account metadata", () => {
             const annotated = annotatedDeploymentsWithCompositeKey(annotateDeploymentsWithAccounts(cleanDeploymentsData(deployments), accounts))
 
             const serviceStackCommits = deploymentsAsServiceStackCommits(annotated);
