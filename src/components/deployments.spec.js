@@ -7,7 +7,10 @@ import {
     flattenByCommitSha,
     calculateRestorationTime,
     groupByRepositoryAndEnvironmentStage,
-    processForDeploymentRecoveryDuration
+    processForDeploymentRecoveryDuration,
+    cleanDeploymentsData,
+    annotateDeploymentsWithAccounts,
+    annotatedDeploymentsWithCompositeKey, deploymentsAsServiceStackCommits
 } from "./deployments"
 import {expandDateProperties} from "./dates.js";
 
@@ -238,7 +241,7 @@ describe("deployments", () => {
     })
 
     describe("#flattenByCommitSha", () => {
-        test("should do", () => {
+        test("should flatten to commit", () => {
             const deployments = [
                 {
                     "commit-sha": "ABCDEF",
@@ -311,6 +314,61 @@ describe("deployments", () => {
                     ],
                     "key": "LMNOPQ"
                 }
+            ])
+        })
+
+        test.skip("should flatten shared commit", () => {
+            const deployments = [
+                {
+                    "commit-sha": "ABCDEF",
+                    "repository": "test-repo",
+                    "team-name": "test-team",
+                    "pod-name": "test-pod-name",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z",
+                },
+                {
+                    "commit-sha": "ABCDEF",
+                    "repository": "test-repo",
+                    "team-name": "test-team-2",
+                    "pod-name": "test-pod-name",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z",
+                }
+            ]
+
+            const flattened = flattenByCommitSha(deployments);
+
+            expect(flattened).toEqual([
+                {
+                    "commit-sha": "ABCDEF",
+                    "deployments": [
+                        {
+                            "commit-sha": "ABCDEF",
+                            "end-time-utc": "2025-01-01T12:10:00Z",
+                            "pod-name": "test-pod-name",
+                            "repository": "test-repo",
+                            "start-time-utc": "2025-01-01T12:00:00Z",
+                            "team-name": "test-team"
+                        }
+                    ],
+                    "key": "ABCDEF"
+                },
+                {
+                    "commit-sha": "GHIJHK",
+                    "deployments": [
+                        {
+                            "commit-sha": "GHIJHK",
+                            "end-time-utc": "2025-01-01T12:40:00Z",
+                            "pod-name": "test-pod-name",
+                            "repository": "test-repo",
+                            "start-time-utc": "2025-01-01T12:30:00Z",
+                            "team-name": "test-team"
+                        }
+                    ],
+                    "key": "GHIJHK"
+                },
+
             ])
         })
     })
@@ -875,4 +933,368 @@ describe("deployments", () => {
 
     });
 
+    describe("#cleanDeployments", () => {
+        test("it should transform object properties from strings", () => {
+            const deployments = [
+                {
+                    "commit-sha": "ABCDEF",
+                    "repository": "test-repo",
+                    "team-name": "test-team",
+                    "pod-name": "test-pod-name",
+                    "environment": "dev",
+                    "stage": "deploy",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z",
+                }
+            ];
+
+            const clean = cleanDeploymentsData(deployments)
+
+            expect(clean).toMatchObject(
+                [{
+                    "build-success": false,
+                    "commit-sha": "ABCDEF",
+                    "devplatform.sam-pipelines.deployment": false,
+                    "duration-minutes": 10,
+                    "environment": "dev",
+                    "pod-name": "test-pod-name",
+                    "repository": "test-repo",
+                    "stage": "deploy",
+                    "team-name": "test-team"
+                }]
+            )
+        })
+
+        test("it should transform start-time-utc as Temporal Instant", () => {
+            const deployments = [
+                {
+                    "commit-sha": "ABCDEF",
+                    "repository": "test-repo",
+                    "team-name": "test-team",
+                    "pod-name": "test-pod-name",
+                    "environment": "dev",
+                    "stage": "deploy",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z",
+                }
+            ];
+
+            const clean = cleanDeploymentsData(deployments)
+
+            expect(clean).toHaveLength(1)
+            expect(clean[0]).toHaveProperty("start-time")
+            expect(clean[0]["start-time"]).toBeInstanceOf(Temporal.Instant);
+            expect(clean[0]["start-time"].toString()).toEqual("2025-01-01T12:00:00Z")
+        })
+
+        test("it should transform end-time-utc as Temporal Instant", () => {
+            const deployments = [
+                {
+                    "commit-sha": "ABCDEF",
+                    "repository": "test-repo",
+                    "team-name": "test-team",
+                    "pod-name": "test-pod-name",
+                    "environment": "dev",
+                    "stage": "deploy",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z",
+                }
+            ];
+
+            const clean = cleanDeploymentsData(deployments)
+
+            expect(clean).toHaveLength(1)
+            expect(clean[0]).toHaveProperty("end-time")
+            expect(clean[0]["end-time"]).toBeInstanceOf(Temporal.Instant);
+            expect(clean[0]["end-time"].toString()).toEqual("2025-01-01T12:10:00Z")
+        })
+
+
+
+        test("it should transform duration as Temporal Duration", () => {
+            const deployments = [
+                {
+                    "commit-sha": "ABCDEF",
+                    "repository": "test-repo",
+                    "team-name": "test-team",
+                    "pod-name": "test-pod-name",
+                    "environment": "dev",
+                    "stage": "deploy",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z",
+                }
+            ];
+
+            const clean = cleanDeploymentsData(deployments)
+
+            expect(clean).toHaveLength(1)
+            expect(clean[0]).toHaveProperty("duration")
+            expect(clean[0].duration).toBeInstanceOf(Temporal.Duration);
+            expect(clean[0].duration.toString()).toEqual("PT600S")
+        })
+
+    })
+
+    describe("#annotateDeploymentwWithAccounts", () => {
+        let deployments;
+        let accounts;
+
+        beforeEach(() => {
+
+            accounts = [{
+                "pod_name": "External Services",
+                "teams": [
+                    {
+                        "accounts": [
+                            {
+                                "account_id": "01",
+                                "account_name": "web-dev"
+                            },
+                            {
+                                "account_id": "02",
+                                "account_name": "web-build"
+                            },
+                            {
+                                "account_id": "03",
+                                "account_name": "web-staging"
+                            },
+                            {
+                                "account_id": "04",
+                                "account_name": "web-integration"
+                            },
+                            {
+                                "account_id": "05",
+                                "account_name": "web-production"
+                            }
+                        ],
+                        "contacts": [
+                            "Veronica Mars",
+                            "Nancy Drew"
+                        ],
+                        "slack_channel_id": "CS1Y50U3Y1A",
+                        "slack_channel_name": "#ask-web-team",
+                        "team_name": "Web Team"
+                    }
+                ]
+            }]
+
+            deployments = [
+                {
+                    "account-id": "02",
+                    "commit-sha": "ABCDEF",
+                    "repository": "govuk-one-login/frontend",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z",
+                },
+                {
+                    "account-id": "03",
+                    "commit-sha": "ABCDEF",
+                    "repository": "govuk-one-login/frontend",
+                    "start-time-utc": "2025-01-01T12:20:00Z",
+                    "end-time-utc": "2025-01-01T12:30:00Z",
+                }
+            ]
+
+        })
+
+        test("should annotate deployments using account metadata", () => {
+            const annotated = annotateDeploymentsWithAccounts(deployments, accounts)
+
+            expect(annotated).toEqual([
+                {
+                    "account-id": "02",
+                    "account-name":"web-build",
+                    "pod-name": "External Services",
+                    "team-name": "Web Team",
+                    "service": "web",
+                    "commit-sha": "ABCDEF",
+                    "repository": "govuk-one-login/frontend",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z"
+                },
+                {
+                    "account-id": "03",
+                    "account-name":"web-staging",
+                    "pod-name": "External Services",
+                    "team-name": "Web Team",
+                    "service": "web",
+                    "commit-sha": "ABCDEF",
+                    "repository": "govuk-one-login/frontend",
+                    "start-time-utc": "2025-01-01T12:20:00Z",
+                    "end-time-utc": "2025-01-01T12:30:00Z"
+                }
+            ])
+        })
+    })
+
+    describe("#annotatedDeploymentsWithCompositeKey", () => {
+        test("it should annotate with composite key using commit-sha, sam-stack-name and service", () => {
+            const deployments = [
+                {
+                    "commit-sha": "ABCDEF",
+                    "sam-stack-name": "stack-name",
+                    "service": "service"
+                }
+            ];
+
+            const annotated = annotatedDeploymentsWithCompositeKey(deployments)
+
+            expect(annotated).toMatchObject(
+                [
+                    {
+                        "commit-sha": "ABCDEF",
+                        "sam-stack-name": "stack-name",
+                        "service": "service",
+                        "_key": "service__stack-name__ABCDEF"
+                    }
+                ]
+            )
+        })
+
+        test("it should annotate with composite key using commit-sha, sam-stack-name (without environment) and service", () => {
+            const deployments = [
+                {
+                    "commit-sha": "ABCDEF",
+                    "sam-stack-name": "build-stack-name",
+                    "service": "service"
+                }
+            ];
+
+            const annotated = annotatedDeploymentsWithCompositeKey(deployments)
+
+            expect(annotated).toMatchObject(
+                [
+                    {
+                        "commit-sha": "ABCDEF",
+                        "sam-stack-name": "build-stack-name",
+                        "service": "service",
+                        "_key": "service__stack-name__ABCDEF"
+                    }
+                ]
+            )
+        })
+    });
+
+
+    describe("#deploymentsAsServiceStackCommits", () => {
+        let deployments;
+        let accounts;
+
+        beforeEach(() => {
+
+            accounts = [{
+                "pod_name": "External Services",
+                "teams": [
+                    {
+                        "accounts": [
+                            {
+                                "account_id": "01",
+                                "account_name": "web-dev"
+                            },
+                            {
+                                "account_id": "02",
+                                "account_name": "web-build"
+                            },
+                            {
+                                "account_id": "03",
+                                "account_name": "web-staging"
+                            },
+                            {
+                                "account_id": "04",
+                                "account_name": "web-integration"
+                            },
+                            {
+                                "account_id": "05",
+                                "account_name": "web-production"
+                            }
+                        ],
+                        "contacts": [
+                            "Veronica Mars",
+                            "Nancy Drew"
+                        ],
+                        "slack_channel_id": "CS1Y50U3Y1A",
+                        "slack_channel_name": "#ask-web-team",
+                        "team_name": "Web Team"
+                    }
+                ]
+            }]
+
+            deployments = [
+                {
+                    "account-id": "02",
+                    "commit-sha": "ABCDEF",
+                    "repository": "govuk-one-login/frontend",
+                    "start-time-utc": "2025-01-01T12:00:00Z",
+                    "end-time-utc": "2025-01-01T12:10:00Z",
+                    "sam-stack-name": "build-stack",
+                    "build-success": "1",
+                    "devplatform.sam-pipelines.deployment": "1"
+                },
+                {
+                    "account-id": "03",
+                    "commit-sha": "ABCDEF",
+                    "repository": "govuk-one-login/frontend",
+                    "start-time-utc": "2025-01-01T12:20:00Z",
+                    "end-time-utc": "2025-01-01T12:30:00Z",
+                    "sam-stack-name": "staging-stack",
+                    "build-success": "1",
+                    "devplatform.sam-pipelines.deployment": "1"
+                }
+            ]
+
+        })
+
+        test.skip("should annotate deployments using account metadata", () => {
+            const annotated = annotatedDeploymentsWithCompositeKey(annotateDeploymentsWithAccounts(cleanDeploymentsData(deployments), accounts))
+
+            const serviceStackCommits = deploymentsAsServiceStackCommits(annotated);
+
+            expect(Object.keys(serviceStackCommits)).toHaveLength(1);
+            expect(serviceStackCommits["web__stack__ABCDEF"]).toMatchObject({
+                "_key": "web__stack__ABCDEF",
+                "pod-name": "External Services",
+                "team-name": "Web Team",
+                "service": "web",
+                "commit-sha": "ABCDEF",
+                "repository": "frontend",
+                "start-time": Temporal.Instant.from("2025-01-01T12:00:00Z"),
+                "end-time": Temporal.Instant.from("2025-01-01T12:30:00Z"),
+                "duration-minutes": Temporal.Instant.from("2025-01-01T12:00:00Z").until(Temporal.Instant.from("2025-01-01T12:30:00Z")).round("minutes").total("minutes"),
+                "duration": Temporal.Instant.from("2025-01-01T12:00:00Z").until(Temporal.Instant.from("2025-01-01T12:30:00Z")),
+            })
+
+            expect(serviceStackCommits["web__stack__ABCDEF"].deployments).toMatchObject([
+                [
+                    {
+                        "_key": "web__stack__ABCDEF",
+                        "account-id": "02",
+                        "account-name":"web-build",
+                        "pod-name": "External Services",
+                        "team-name": "Web Team",
+                        "service": "web",
+                        "commit-sha": "ABCDEF",
+                        "repository": "frontend",
+                        "build-success": true,
+                        "devplatform.sam-pipelines.deployment": true,
+                        "start-time-utc": Temporal.Instant.from("2025-01-01T12:00:00Z"),
+                        "end-time-utc": Temporal.Instant.from("2025-01-01T12:10:00Z")
+                    },
+                    {
+                        "_key": "web__stack__ABCDEF",
+                        "account-id": "03",
+                        "account-name":"web-staging",
+                        "pod-name": "External Services",
+                        "team-name": "Web Team",
+                        "service": "web",
+                        "commit-sha": "ABCDEF",
+                        "repository": "frontend",
+                        "build-success": true,
+                        "devplatform.sam-pipelines.deployment": true,
+                        "start-time-utc": Temporal.Instant.from("2025-01-01T12:20:00Z"),
+                        "end-time-utc": Temporal.Instant.from("2025-01-01T12:30:00Z")
+                    }
+                ]
+            ])
+        })
+    })
 });

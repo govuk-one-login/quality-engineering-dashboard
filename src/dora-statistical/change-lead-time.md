@@ -1,5 +1,5 @@
 ```js
-import { createAWSAccountLookupTable } from "../components/accounts.js"
+import {createAWSAccountLookupTable} from "../components/accounts.js"
 
 import {
     applyDurationRangeToCommit,
@@ -15,9 +15,9 @@ import {
     flattenByCommitSha
 } from "../components/deployments.js";
 
-import { filterByQuarterWithKey, commitsWithNonEmptyPods } from "../components/filters.js"
+import {filterByQuarterWithKey, commitsWithNonEmptyPods} from "../components/filters.js"
 
-import { accountNameToService } from "../components/strings.js"
+import {accountNameToService} from "../components/strings.js"
 ```
 
 ```js

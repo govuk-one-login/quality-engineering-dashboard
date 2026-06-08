@@ -7,14 +7,14 @@
 </div>
 
 ```js
-import { createAWSAccountLookupTable } from "../components/accounts.js"
+import {createAWSAccountLookupTable} from "../components/accounts.js"
 
 import {
     applyDurationRangeToCommit,
     applyRecoveryDurationToCommit
 } from "../components/commits.js"
 
-import { weekdays } from "../components/dates.js"
+import {weekdays} from "../components/dates.js"
 
 import {
     addAccountDetailsToDeployments,
@@ -22,7 +22,7 @@ import {
     calculateRestorationTime
 } from "../components/deployments.js";
 
-import { commitsWithSuccessfulProductionBuilds, commitsWithNonEmptyPods} from "../components/filters.js"
+import {commitsWithSuccessfulProductionBuilds, commitsWithNonEmptyPods} from "../components/filters.js"
 ```
 
 
