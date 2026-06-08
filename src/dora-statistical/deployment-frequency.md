@@ -1,5 +1,5 @@
 ```js
-import { createAWSAccountLookupTable } from "../components/accounts.js"
+import {createAWSAccountLookupTable} from "../components/accounts.js"
 
 import {
     addAccountDetailsToDeployments,
@@ -11,9 +11,9 @@ import {
     applyDurationRangeToCommitWithSort
 } from "../components/commits.js"
 
-import { expandDateProperties } from "../components/dates.js"
+import {expandDateProperties} from "../components/dates.js"
 
-import { commitsWithSuccessfulProductionBuilds, commitsWithNonEmptyPods } from "../components/filters.js"
+import {commitsWithSuccessfulProductionBuilds, commitsWithNonEmptyPods} from "../components/filters.js"
 ```
 
 # Deployment Frequency

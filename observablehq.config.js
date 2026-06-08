@@ -7,10 +7,16 @@ export default {
     {
       name: "DORA",
       pages: [
-        {name: "Change lead time", path: "/dora/change-lead-time"},
-        {name: "Deployment Frequency", path: "/dora/deployment-frequency"},
-        {name: "Change failure rate", path: "/dora/change-failure-rate"},
-        {name: "Failed Deployment Recovery Time", path: "/dora/failed-deployment-recovery-time"}
+        {name: "Dashboard", path: "/dora/dashboard"},
+      ]
+    },
+    {
+      name: "DORA Statistical",
+      pages: [
+        {name: "Change lead time", path: "/dora-statistical/change-lead-time"},
+        {name: "Deployment Frequency", path: "/dora-statistical/deployment-frequency"},
+        {name: "Change failure rate", path: "/dora-statistical/change-failure-rate"},
+        {name: "Failed Deployment Recovery Time", path: "/dora-statistical/failed-deployment-recovery-time"}
       ]
     },
     {
