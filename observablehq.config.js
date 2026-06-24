@@ -8,6 +8,7 @@ export default {
       name: "DORA",
       pages: [
         {name: "Dashboard", path: "/dora/dashboard"},
+        {name: "Data Deep Dive", path: "/dora/data-deep-dive"}
       ]
     },
     {
